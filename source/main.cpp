@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
-#include "gaming_launcher_command.hpp"
+#include "gaming_launcher_lutris.hpp"
 #include "gaming_types.hpp"
 #include "separator_item.hpp"
 #include "blank_item.hpp"
@@ -49,11 +49,11 @@ int main(void)
         return 1;
     }
 
-    GamingLauncherCommand firefoxLauncher("firefox");
+    GamingLauncherLutris th18Launcher("touhou-18-unconnected-marketeers");
 
     BlankItem blank;
     SeparatorMenuItem testSeparator({255, 0, 0, 255}, {255, 0, 0, 255}, 1, 3, 50, 50, GamingAlign::Left, GamingAlign::Right, 10, 30);
-    LauncherMenuItem testLauncher({255, 255, 255, 255}, {50, 50, 255, 255}, "Launch Firefox", "Launch Firefox!!", GamingAlign::Left, GamingAlign::Left, 10, 15, font, renderer, &firefoxLauncher);
+    LauncherMenuItem testLauncher({255, 255, 255, 255}, {50, 50, 255, 255}, "Launch Firefox", "Launch Firefox!!", GamingAlign::Left, GamingAlign::Left, 10, 15, font, renderer, &th18Launcher);
 
     Menu menu({&blank, &testSeparator, &testLauncher});
 
