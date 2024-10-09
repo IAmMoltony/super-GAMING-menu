@@ -1,12 +1,9 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_error.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_keycode.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include "gaming_types.hpp"
 #include "separator_item.hpp"
+#include "blank_item.hpp"
 #include "menu.hpp"
 
 int main(void)
@@ -30,9 +27,15 @@ int main(void)
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
+    if (TTF_Init() != 0) {
+        std::cerr << "Failed to initialize SDL_ttf: " << SDL_GetError() << std::endl;
+        return 1;
+    }
+
+    BlankItem blank;
     SeparatorMenuItem testSeparator({255, 0, 0, 255}, {255, 0, 0, 255}, 1, 3, 50, 50, GamingAlign::Left, GamingAlign::Right, 10, 30);
 
-    Menu menu({&testSeparator});
+    Menu menu({&blank, &testSeparator});
 
     bool running = true;
     while (running) {
@@ -63,6 +66,8 @@ int main(void)
 
         SDL_RenderPresent(renderer);
     }
+
+    TTF_Quit();
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

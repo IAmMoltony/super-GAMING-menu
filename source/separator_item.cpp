@@ -41,7 +41,3 @@ void SeparatorMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
         SDL_RenderDrawLine(renderer, x1, lineY + i, x2, lineY + i);
     }
 }
-
-void SeparatorMenuItem::onInteract(void)
-{
-}

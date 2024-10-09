@@ -21,5 +21,4 @@ public:
     ~SeparatorMenuItem();
 
     virtual void draw(SDL_Renderer *renderer, int y, bool isHovered) override;
-    virtual void onInteract(void) override;
 };
