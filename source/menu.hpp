@@ -18,5 +18,6 @@ public:
     void draw(SDL_Renderer *renderer);
     void addItem(MenuItem *item);
     void onMouseMove(int mouseX, int mouseY);
+    void onMouseDown(int button);
     void onKeyDown(SDL_Keycode key);
 };

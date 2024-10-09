@@ -5,6 +5,7 @@
 #include "separator_item.hpp"
 #include "blank_item.hpp"
 #include "text_item.hpp"
+#include "launcher_item.hpp"
 #include "menu.hpp"
 
 int main(void)
@@ -50,9 +51,9 @@ int main(void)
 
     BlankItem blank;
     SeparatorMenuItem testSeparator({255, 0, 0, 255}, {255, 0, 0, 255}, 1, 3, 50, 50, GamingAlign::Left, GamingAlign::Right, 10, 30);
-    TextMenuItem testText({255, 255, 255, 255}, {255, 0, 255, 255}, "Hello, world", "World, hello", GamingAlign::Left, GamingAlign::Right, 10, 20, font, renderer);
+    LauncherMenuItem testLauncher({255, 255, 255, 255}, {50, 50, 255, 255}, "Launch Firefox", "Launch Firefox!!", GamingAlign::Left, GamingAlign::Left, 10, 15, font, renderer, "firefox");
 
-    Menu menu({&blank, &testSeparator, &testText});
+    Menu menu({&blank, &testSeparator, &testLauncher});
 
     bool running = true;
     while (running) {
@@ -70,6 +71,8 @@ int main(void)
                 }
             } else if (event.type == SDL_MOUSEMOTION) {
                 menu.onMouseMove(event.motion.x, event.motion.y);
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                menu.onMouseDown(event.button.button);
             }
         }
 

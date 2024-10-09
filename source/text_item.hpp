@@ -7,7 +7,7 @@
 
 class TextMenuItem : public MenuItem
 {
-private:
+protected:
     SDL_Texture *mTexture;
     SDL_Texture *mHoverTexture;
     int mTextureWidth;

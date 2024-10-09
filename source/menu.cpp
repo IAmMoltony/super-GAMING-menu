@@ -45,6 +45,13 @@ void Menu::onMouseMove(int mouseX, int mouseY)
     }
 }
 
+void Menu::onMouseDown(int button)
+{
+    if (button == 1 && mHoveredItem >= 0) {
+        mItems[mHoveredItem]->onInteract();
+    }
+}
+
 void Menu::onKeyDown(SDL_Keycode key)
 {
     if (key == SDLK_DOWN) {
@@ -57,5 +64,7 @@ void Menu::onKeyDown(SDL_Keycode key)
         if (mHoveredItem < 0) {
             mHoveredItem = 0;
         }
+    } else if (key == SDLK_RETURN && mHoveredItem >= 0) {
+        mItems[mHoveredItem]->onInteract();
     }
 }
