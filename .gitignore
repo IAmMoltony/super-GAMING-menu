@@ -3,3 +3,4 @@ Makefile
 super-GAMING-menu
 cmake_install.cmake
 CMakeFiles/
+*.swp
