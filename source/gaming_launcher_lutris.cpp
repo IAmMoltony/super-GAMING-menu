@@ -1,5 +1,5 @@
 #include "gaming_launcher_lutris.hpp"
-#include <cstdlib>
+#include <boost/process.hpp>
 
 GamingLauncherLutris::GamingLauncherLutris(std::string lutrisId) : mLutrisId(lutrisId)
 {
@@ -7,5 +7,6 @@ GamingLauncherLutris::GamingLauncherLutris(std::string lutrisId) : mLutrisId(lut
 
 void GamingLauncherLutris::launch(void)
 {
-    std::system(std::string("lutris lutris:rungame/" + mLutrisId).c_str());
+    boost::process::child process("lutris lutris:rungame/" + mLutrisId);
+    process.detach();
 }

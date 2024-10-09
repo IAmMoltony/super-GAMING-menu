@@ -1,5 +1,5 @@
 #include "gaming_launcher_command.hpp"
-#include <cstdlib>
+#include <boost/process.hpp>
 
 GamingLauncherCommand::GamingLauncherCommand(std::string command) : mCommand(command)
 {
@@ -7,5 +7,6 @@ GamingLauncherCommand::GamingLauncherCommand(std::string command) : mCommand(com
 
 void GamingLauncherCommand::launch(void)
 {
-    std::system(mCommand.c_str());
+    boost::process::child process(mCommand);
+    process.detach();
 }
