@@ -4,6 +4,7 @@
 #include "gaming_types.hpp"
 #include "separator_item.hpp"
 #include "blank_item.hpp"
+#include "text_item.hpp"
 #include "menu.hpp"
 
 int main(void)
@@ -22,6 +23,8 @@ int main(void)
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer) {
         std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(window);
+        SDL_Quit();
 	return 1;
     }
 
@@ -29,13 +32,27 @@ int main(void)
 
     if (TTF_Init() != 0) {
         std::cerr << "Failed to initialize SDL_ttf: " << SDL_GetError() << std::endl;
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    TTF_Font *font = TTF_OpenFont("/usr/share/fonts/liberation-sans/LiberationSans-Regular.ttf", 24);
+    if (!font) {
+        std::cerr << "Failed to open font: " << TTF_GetError() << std::endl;
+        TTF_Quit();
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
         return 1;
     }
 
     BlankItem blank;
     SeparatorMenuItem testSeparator({255, 0, 0, 255}, {255, 0, 0, 255}, 1, 3, 50, 50, GamingAlign::Left, GamingAlign::Right, 10, 30);
+    TextMenuItem testText({255, 255, 255, 255}, {255, 0, 255, 255}, "Hello, world", "World, hello", GamingAlign::Left, GamingAlign::Right, 10, 20, font, renderer);
 
-    Menu menu({&blank, &testSeparator});
+    Menu menu({&blank, &testSeparator, &testText});
 
     bool running = true;
     while (running) {
