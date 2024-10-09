@@ -7,8 +7,11 @@ include_directories(${SDL2_INCLUDE_DIRS})
 find_package(SDL2_ttf REQUIRED)
 include_directories(${SDL2_ttf_INCLUDE_DIRS})
 
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 file(GLOB SOURCES source/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_ttf_LIBRARIES} -lSDL2_ttf)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_ttf_LIBRARIES} -lSDL2_ttf ${Boost_LIBRARIES})
