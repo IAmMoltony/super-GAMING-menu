@@ -3,11 +3,13 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include "gaming_launcher_lutris.hpp"
+#include "gaming_launcher_command.hpp"
 #include "gaming_types.hpp"
 #include "separator_item.hpp"
 #include "blank_item.hpp"
 #include "launcher_item.hpp"
 #include "menu.hpp"
+#include "text_item.hpp"
 
 int main(void)
 {
@@ -60,13 +62,16 @@ int main(void)
         SDL_Quit();
     }
 
-    GamingLauncherLutris th18Launcher("touhou-18-unconnected-marketeers");
+    GamingLauncherCommand firefoxLauncher("firefox");
+    GamingLauncherCommand dolphinLauncher("dolphin");
+    GamingLauncherCommand kittyLauncher("kitty");
 
-    BlankItem blank;
-    SeparatorMenuItem testSeparator({255, 0, 0, 255}, {255, 0, 0, 255}, 1, 3, 50, 50, GamingAlign::Left, GamingAlign::Right, 10, 30);
-    LauncherMenuItem testLauncher({255, 255, 255, 255}, {50, 50, 255, 255}, "Launch Firefox", "Launch Firefox!!", GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, 50, 55, 10, 15, "/usr/share/icons/hicolor/32x32/apps/firefox.png", font, renderer, &th18Launcher);
+    TextMenuItem headerText({255, 255, 255, 255}, {240, 240, 240, 255}, "super GAMING menu", "super G A M I N G menu", GamingAlign::Center, GamingAlign::Center, 0, 0, font, renderer);
+    LauncherMenuItem firefoxItem({255, 255, 255, 255}, {0, 255, 0, 255}, "Firefox", "Browse the web!", GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, 50, 55, 10, 15, "/usr/share/icons/hicolor/32x32/apps/firefox.png", font, renderer, &firefoxLauncher);
+    LauncherMenuItem dolphinItem({255, 255, 255, 255}, {0, 255, 0, 255}, "Dolphin", "Explore files!", GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, 50, 55, 10, 15, "/usr/share/icons/HighContrast/32x32/places/folder.png", font, renderer, &dolphinLauncher);
+    LauncherMenuItem kittyItem({255, 255, 255, 255}, {0, 255, 0, 255}, "kitty", "Open the terminal!", GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, 50, 55, 10, 15, "/usr/share/icons/hicolor/256x256/apps/kitty.png", font, renderer, &kittyLauncher);
 
-    Menu menu({&blank, &testSeparator, &testLauncher});
+    Menu menu({&headerText, &firefoxItem, &dolphinItem, &kittyItem});
 
     bool running = true;
     while (running) {
