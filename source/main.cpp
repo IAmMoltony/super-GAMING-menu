@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include "gaming_launcher_lutris.hpp"
 #include "gaming_types.hpp"
@@ -49,11 +50,21 @@ int main(void)
         return 1;
     }
 
+    int imgInitFlags = IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_TIF | IMG_INIT_WEBP | IMG_INIT_AVIF | IMG_INIT_JXL;
+    if (!(IMG_Init(imgInitFlags) & imgInitFlags)) {
+        std::cerr << "Failed to initialize SDL_image: " << IMG_GetError() << std::endl;
+        TTF_CloseFont(font);
+        TTF_Quit();
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+    }
+
     GamingLauncherLutris th18Launcher("touhou-18-unconnected-marketeers");
 
     BlankItem blank;
     SeparatorMenuItem testSeparator({255, 0, 0, 255}, {255, 0, 0, 255}, 1, 3, 50, 50, GamingAlign::Left, GamingAlign::Right, 10, 30);
-    LauncherMenuItem testLauncher({255, 255, 255, 255}, {50, 50, 255, 255}, "Launch Firefox", "Launch Firefox!!", GamingAlign::Left, GamingAlign::Left, 10, 15, font, renderer, &th18Launcher);
+    LauncherMenuItem testLauncher({255, 255, 255, 255}, {50, 50, 255, 255}, "Launch Firefox", "Launch Firefox!!", GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, GamingAlign::Left, 50, 55, 10, 15, "/usr/share/icons/hicolor/32x32/apps/firefox.png", font, renderer, &th18Launcher);
 
     Menu menu({&blank, &testSeparator, &testLauncher});
 
@@ -89,6 +100,9 @@ int main(void)
         SDL_RenderPresent(renderer);
     }
 
+    IMG_Quit();
+
+    TTF_CloseFont(font);
     TTF_Quit();
 
     SDL_DestroyRenderer(renderer);

@@ -17,4 +17,4 @@ file(GLOB SOURCES source/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_ttf_LIBRARIES} -lSDL2_ttf ${SDL2_image_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_ttf_LIBRARIES} -lSDL2_ttf -lSDL2_image ${Boost_LIBRARIES})
