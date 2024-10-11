@@ -1,9 +1,15 @@
 #include "blank_item.hpp"
 
-BlankItem::BlankItem()
+using json = nlohmann::json;
+
+BlankMenuItem::BlankMenuItem()
 {
 }
 
-BlankItem::~BlankItem()
+BlankMenuItem::BlankMenuItem(json itemJson) : MenuItem(itemJson)
+{
+}
+
+BlankMenuItem::~BlankMenuItem()
 {
 }

@@ -13,7 +13,7 @@ include_directories(${SDL2_image_INCLUDE_DIRS})
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-file(GLOB SOURCES source/*.cpp)
+file(GLOB_RECURSE SOURCES source/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 

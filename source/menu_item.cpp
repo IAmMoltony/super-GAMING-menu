@@ -1,10 +1,21 @@
 #include "menu_item.hpp"
 
+using json = nlohmann::json;
+
 MenuItem::MenuItem()
 {
 }
 
+MenuItem::MenuItem(json itemJson)
+{
+    configure(itemJson);
+}
+
 MenuItem::~MenuItem()
+{
+}
+
+void MenuItem::configure(json itemJson)
 {
 }
 
