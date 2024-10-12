@@ -2,6 +2,7 @@
 #include "blank_item.hpp"
 #include "nlohmann/json.hpp"
 #include "separator_item.hpp"
+#include "text_item.hpp"
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -75,33 +76,7 @@ static GamingAlign parseAlign(std::string alignString)
     return GamingAlign::Left;
 }
 
-std::ostream &operator<<(std::ostream &os, const SDL_Color &color)
-{
-    os << "(r=" << (int)color.r << " g=" << (int)color.g << " b=" << (int)color.b << " a=" << (int)color.a << ")";
-    return os;
-}
-
-std::ostream &operator<<(std::ostream &os, const GamingAlign &align)
-{
-    switch (align) {
-    case GamingAlign::Left:
-        os << "Left Align";
-        break;
-    case GamingAlign::Center:
-        os << "Center Align";
-        break;
-    case GamingAlign::Right:
-        os << "Right Align";
-        break;
-    default:
-        os << "Illegal Align";
-        break;
-    }
-
-    return os;
-}
-
-Menu loadConfig(std::string configFile)
+Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer)
 {
     Menu menu;
 
@@ -113,7 +88,6 @@ Menu loadConfig(std::string configFile)
         std::string itemKind = item["kind"];
 
         if (itemKind == "blank") {
-            std::cout << "adding blank item" << std::endl;
             menu.addItem(new BlankMenuItem());
         } else if (itemKind == "separator") {
             SDL_Color color = {255, 255, 255, 255};
@@ -177,9 +151,58 @@ Menu loadConfig(std::string configFile)
                 hoverPadding = padding;
             }
 
-            std::cout << "adding separator with color: " << color << " hover color: " << hoverColor << " thickness: " << thickness << " hover thickness: " << hoverThickness << " size: " << size << " hover size: " << hoverSize << " align: " << align << " hover align: " << hoverAlign << " padding: " << padding << " hover padding: " << hoverPadding << std::endl;
-
             menu.addItem(new SeparatorMenuItem(color, hoverColor, thickness, hoverThickness, size, hoverSize, align, hoverAlign, padding, hoverPadding));
+        } else if (itemKind == "text") {
+            SDL_Color color = {255, 255, 255, 255};
+            SDL_Color hoverColor;
+            std::string text = "";
+            std::string hoverText;
+            GamingAlign align = GamingAlign::Center;
+            GamingAlign hoverAlign;
+            int padding = 10;
+            int hoverPadding;
+
+            if (item.contains("color") && item["color"].is_object()) {
+                color = parseColor(item["color"]);
+            }
+
+            if (item.contains("hover_color") && item["hover_color"].is_object()) {
+                hoverColor = parseColor(item["hover_color"]);
+            } else {
+                hoverColor = color;
+            }
+
+            if (item.contains("text") && item["text"].is_string()) {
+                text = item["text"];
+            }
+
+            if (item.contains("hover_text") && item["hover_text"].is_string()) {
+                hoverText = item["hover_text"];
+            } else {
+                hoverText = text;
+            }
+
+            if (item.contains("align") && item["align"].is_string()) {
+                align = parseAlign(item["align"]);
+            }
+
+            if (item.contains("hover_align") && item["hover_align"].is_string()) {
+                hoverAlign = parseAlign(item["hover_align"]);
+            } else {
+                hoverAlign = align;
+            }
+
+            if (item.contains("padding") && item["padding"].is_number()) {
+                padding = item["padding"];
+            }
+
+            if (item.contains("hover_padding") && item["hover_padding"].is_number()) {
+                hoverPadding = item["hover_padding"];
+            } else {
+                padding = hoverPadding;
+            }
+
+            menu.addItem(new TextMenuItem(color, hoverColor, text, hoverText, align, hoverAlign, padding, hoverPadding, font, renderer));
         } else {
             std::cerr << "Unknown item kind '" << itemKind << "'." << std::endl;
         }

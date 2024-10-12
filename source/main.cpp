@@ -55,7 +55,7 @@ int main(void)
         SDL_Quit();
     }
 
-    Menu menu = loadConfig("config.json");
+    Menu menu = loadConfig("config.json", font, renderer);
 
     bool running = true;
     while (running) {
