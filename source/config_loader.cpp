@@ -1,8 +1,10 @@
 #include "config_loader.hpp"
 #include "blank_item.hpp"
+#include "gaming_launcher_command.hpp"
 #include "nlohmann/json.hpp"
 #include "separator_item.hpp"
 #include "text_item.hpp"
+#include "launcher_item.hpp"
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -76,6 +78,40 @@ static GamingAlign parseAlign(std::string alignString)
     return GamingAlign::Left;
 }
 
+static GamingLauncher *parseLauncher(json launcherJson)
+{
+    std::string launcherKind;
+
+    if (!launcherJson.contains("kind")) {
+        std::cerr << "Error parsing launcher " << launcherJson << ": required 'kind' field not found" << std::endl;
+        return nullptr;
+    }
+
+    if (!launcherJson["kind"].is_string()) {
+        std::cerr << "Error parsing launcher " << launcherJson << ": field 'kind' is not a string" << std::endl;
+        return nullptr;
+    }
+
+    launcherKind = launcherJson["kind"];
+
+    if (launcherKind == "command") {
+        std::string command;
+        if (!launcherJson.contains("command")) {
+            std::cerr << "Error parsing command launcher " << launcherJson << ": required 'command' field not found" << std::endl;
+            return nullptr;
+        }
+        if (!launcherJson["command"].is_string()) {
+            std::cerr << "Error parsing command launcher " << launcherJson << ": field 'command' is not a string" << std::endl;
+        }
+
+        command = launcherJson["command"];
+        return new GamingLauncherCommand(command);
+    }
+
+    std::cerr << "Error parsing launcher " << launcherJson << ": unknown launcher kind '" << launcherKind << "'" << std::endl;
+    return nullptr;
+}
+
 Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer)
 {
     Menu menu;
@@ -85,7 +121,19 @@ Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer)
     json items = data["items"];
 
     for (json item : items) {
-        std::string itemKind = item["kind"];
+        std::string itemKind;
+
+        if (!item.contains("kind")) {
+            std::cerr << "Error parsing menu item " << item << ": required 'kind' field not found" << std::endl;
+            continue;
+        }
+
+        if (!item["kind"].is_string()) {
+            std::cerr << "Error parsing menu item " << item << ": field 'kind' is not a string" << std::endl;
+            continue;
+        }
+
+        itemKind = item["kind"];
 
         if (itemKind == "blank") {
             menu.addItem(new BlankMenuItem());
@@ -203,6 +251,103 @@ Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer)
             }
 
             menu.addItem(new TextMenuItem(color, hoverColor, text, hoverText, align, hoverAlign, padding, hoverPadding, font, renderer));
+        } else if (itemKind == "launcher") {
+            SDL_Color textColor = {255, 255, 255, 255};
+            SDL_Color hoverTextColor;
+            std::string text = "";
+            std::string hoverText;
+            GamingAlign textAlign = GamingAlign::Center;
+            GamingAlign hoverTextAlign;
+            GamingAlign iconAlign = GamingAlign::Right;
+            GamingAlign hoverIconAlign;
+            int textPadding = 10;
+            int hoverTextPadding;
+            int iconPadding = 10;
+            int hoverIconPadding;
+            std::string iconPath;
+            GamingLauncher *launcher;
+
+            if (item.contains("text_color") && item["text_color"].is_object()) {
+                textColor = parseColor(item["text_color"]);
+            }
+
+            if (item.contains("hover_text_color") && item["hover_text_color"].is_object()) {
+                hoverTextColor = parseColor(item["hover_text_color"]);
+            } else {
+                hoverTextColor = textColor;
+            }
+
+            if (item.contains("text") && item["text"].is_string()) {
+                text = item["text"];
+            }
+
+            if (item.contains("hover_text") && item["hover_text"].is_string()) {
+                hoverText = item["hover_text"];
+            } else {
+                hoverText = text;
+            }
+
+            if (item.contains("text_align") && item["text_align"].is_string()) {
+                textAlign = parseAlign(item["text_align"]);
+            }
+
+            if (item.contains("hover_text_align") && item["hover_text_align"].is_string()) {
+                hoverTextAlign = parseAlign(item["hover_text_align"]);
+            } else {
+                hoverTextAlign = textAlign;
+            }
+
+            if (item.contains("icon_align") && item["icon_align"].is_string()) {
+                iconAlign = parseAlign(item["icon_align"]);
+            }
+
+            if (item.contains("hover_icon_align") && item["hover_icon_align"].is_string()) {
+                hoverIconAlign = parseAlign(item["hover_icon_align"]);
+            } else {
+                hoverIconAlign = iconAlign;
+            }
+
+            if (item.contains("text_padding") && item["text_padding"].is_number()) {
+                textPadding = item["text_padding"];
+            }
+
+            if (item.contains("hover_text_padding") && item["hover_text_padding"].is_number()) {
+                hoverTextPadding = item["hover_text_padding"];
+            } else {
+                hoverTextPadding = textPadding;
+            }
+
+            if (item.contains("icon_padding") && item["icon_padding"].is_number()) {
+                iconPadding = item["icon_padding"];
+            }
+
+            if (item.contains("hover_icon_padding") && item["hover_icon_padding"].is_number()) {
+                hoverIconPadding = item["hover_icon_padding"];
+            } else {
+                hoverIconPadding = iconPadding;
+            }
+
+            if (item.contains("icon_path") && item["icon_path"].is_string()) {
+                iconPath = item["icon_path"];
+            }
+
+            if (item.contains("launcher")) {
+                if (item["launcher"].is_object()) {
+                    launcher = parseLauncher(item["launcher"]);
+                } else {
+                    std::cerr << "Error parsing launcher item " << item << ": field 'launcher' is not an object" << std::endl;
+                    continue;
+                }
+            } else {
+                std::cerr << "Error parsing launcher item " << item << ": required 'launcher' field not found " << std::endl;
+                continue;
+            }
+
+            if (iconPath.size() == 0) {
+                menu.addItem(new LauncherMenuItem(textColor, hoverTextColor, text, hoverText, textAlign, hoverTextAlign, textPadding, hoverTextPadding, font, renderer, launcher));
+            } else {
+                menu.addItem(new LauncherMenuItem(textColor, hoverTextColor, text, hoverText, textAlign, hoverTextAlign, iconAlign, hoverIconAlign, textPadding, hoverTextPadding, iconPadding, hoverIconPadding, iconPath, font, renderer, launcher));
+            }
         } else {
             std::cerr << "Unknown item kind '" << itemKind << "'." << std::endl;
         }

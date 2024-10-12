@@ -47,5 +47,6 @@ void LauncherMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
 
 void LauncherMenuItem::onInteract(void)
 {
-    mLauncher->launch();
+    if (mLauncher)
+        mLauncher->launch();
 }
