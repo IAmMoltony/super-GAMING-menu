@@ -1,7 +1,4 @@
 #include "separator_item.hpp"
-#include "config/parsers.hpp"
-
-using json = nlohmann::json;
 
 SeparatorMenuItem::SeparatorMenuItem(SDL_Color color, SDL_Color hoverColor, int thickness, int hoverThickness, int size, int hoverSize, GamingAlign align, GamingAlign hoverAlign, int padding, int hoverPadding) : color(color), hoverColor(hoverColor), thickness(thickness), hoverThickness(hoverThickness), size(size), hoverSize(hoverSize), align(align), hoverAlign(hoverAlign), padding(padding), hoverPadding(hoverPadding)
 {
@@ -9,73 +6,6 @@ SeparatorMenuItem::SeparatorMenuItem(SDL_Color color, SDL_Color hoverColor, int 
 
 SeparatorMenuItem::~SeparatorMenuItem()
 {
-}
-
-SeparatorMenuItem::SeparatorMenuItem(json itemJson) : MenuItem(itemJson)
-{
-}
-
-void SeparatorMenuItem::configure(json itemJson)
-{
-    if (itemJson.contains("color") && itemJson.is_object()) {
-        color = parseColor(itemJson["color"]);
-    } else {
-        color = {255, 255, 255, 255};
-    }
-
-    if (itemJson.contains("hover_color")) {
-        hoverColor = parseColor(itemJson["hover_color"]);
-    } else {
-        color = {255, 255, 255, 255};
-    }
-
-    if (itemJson.contains("thickness") && itemJson["thickness"].is_number()) {
-        thickness = itemJson["thickness"];
-    } else {
-        thickness = 1;
-    }
-
-    if (itemJson.contains("hover_thickness") && itemJson["hover_thickness"].is_number()) {
-        hoverThickness = itemJson["hover_thickness"];
-    } else {
-        hoverThickness = 1;
-    }
-
-    if (itemJson.contains("size") && itemJson["size"].is_number()) {
-        size = itemJson["size"];
-    } else {
-        size = 85;
-    }
-
-    if (itemJson.contains("hover_size") && itemJson["hover_size"].is_number()) {
-        hoverSize = itemJson["hover_size"];
-    } else {
-        size = 85;
-    }
-
-    if (itemJson.contains("align") && itemJson["align"].is_string()) {
-        align = parseAlign(itemJson["align"]);
-    } else {
-        align = GamingAlign::Center;
-    }
-
-    if (itemJson.contains("hover_align") && itemJson["hover_align"].is_string()) {
-        hoverAlign = parseAlign(itemJson["align"]);
-    } else {
-        align = GamingAlign::Center;
-    }
-
-    if (itemJson.contains("padding") && itemJson["padding"].is_number()) {
-        padding = itemJson["padding"];
-    } else {
-        padding = 0;
-    }
-
-    if (itemJson.contains("hover_padding") && itemJson["hover_padding"].is_number()) {
-        hoverPadding = itemJson["hover_padding"];
-    } else {
-        hoverPadding = 0;
-    }
 }
 
 void SeparatorMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)

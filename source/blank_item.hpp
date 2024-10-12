@@ -6,6 +6,5 @@ class BlankMenuItem : public MenuItem
 {
 public:
     BlankMenuItem();
-    BlankMenuItem(nlohmann::json itemJson);
     ~BlankMenuItem();
 };
