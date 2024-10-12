@@ -1,6 +1,7 @@
 #include "config_loader.hpp"
 #include "blank_item.hpp"
 #include "gaming_launcher_command.hpp"
+#include "gaming_launcher_lutris.hpp"
 #include "nlohmann/json.hpp"
 #include "separator_item.hpp"
 #include "text_item.hpp"
@@ -102,10 +103,24 @@ static GamingLauncher *parseLauncher(json launcherJson)
         }
         if (!launcherJson["command"].is_string()) {
             std::cerr << "Error parsing command launcher " << launcherJson << ": field 'command' is not a string" << std::endl;
+            return nullptr;
         }
 
         command = launcherJson["command"];
         return new GamingLauncherCommand(command);
+    } else if (launcherKind == "lutris") {
+        std::string lutrisId;
+        if (!launcherJson.contains("lutris_id")) {
+            std::cerr << "Error parsing Lutris launcher " << launcherJson << ": required 'lutris_id' field not found" << std::endl;
+            return nullptr;
+        }
+        if (!launcherJson["lutris_id"].is_string()) {
+            std::cerr << "Error parsing Lutris launcher " << launcherJson << ": field 'lutris_id' is not a string" << std::endl;
+            return nullptr;
+        }
+
+        lutrisId = launcherJson["lutris_id"];
+        return new GamingLauncherLutris(lutrisId);
     }
 
     std::cerr << "Error parsing launcher " << launcherJson << ": unknown launcher kind '" << launcherKind << "'" << std::endl;
