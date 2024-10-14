@@ -39,7 +39,7 @@ TextMenuItem::~TextMenuItem()
     SDL_DestroyTexture(mHoverTexture);
 }
 
-void TextMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
+void TextMenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered)
 {
     SDL_Texture *texture = isHovered ? mHoverTexture : mTexture;
     int textureWidth = isHovered ? mHoverTextureWidth : mTextureWidth;
@@ -53,10 +53,10 @@ void TextMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
         x = realPadding;
         break;
     case GamingAlign::Center:
-        x = 250 - textureWidth / 2;
+        x = (windowWidth / 2) - textureWidth / 2;
         break;
     case GamingAlign::Right:
-        x = 500 - textureWidth - realPadding;
+        x = windowWidth - textureWidth - realPadding;
         break;
     }
 

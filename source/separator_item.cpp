@@ -8,7 +8,7 @@ SeparatorMenuItem::~SeparatorMenuItem()
 {
 }
 
-void SeparatorMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
+void SeparatorMenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered)
 {
     SDL_Color realColor = isHovered ? hoverColor : color;
     int realThickness = isHovered ? hoverThickness : thickness;
@@ -16,23 +16,23 @@ void SeparatorMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
     GamingAlign realAlign = isHovered ? hoverAlign : align;
     int realPadding = isHovered ? hoverPadding : padding;
 
-    int pixelSize = (int)(realSize / 100.0 * 500.0);
+    int pixelSize = (int)(realSize / 100.0 * (double)windowWidth);
     int halfPixelSize = pixelSize / 2;
     int lineY = y + 16 - (realThickness / 2);
 
     int x1, x2;
     switch (realAlign) {
     case GamingAlign::Center:
-        x1 = 250 - halfPixelSize;
-        x2 = 250 + halfPixelSize;
+        x1 = (windowWidth / 2) - halfPixelSize;
+        x2 = (windowWidth / 2) + halfPixelSize;
         break;
     case GamingAlign::Left:
         x1 = realPadding;
         x2 = realPadding + pixelSize;
         break;
     case GamingAlign::Right:
-        x1 = 500 - pixelSize - realPadding;
-        x2 = 500 - realPadding;
+        x1 = windowWidth - pixelSize - realPadding;
+        x2 = windowWidth - realPadding;
         break;
     }
 

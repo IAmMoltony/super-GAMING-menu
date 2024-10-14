@@ -18,6 +18,6 @@ public:
     LauncherMenuItem(SDL_Color color, SDL_Color hoverColor, std::string text, std::string hoverText, GamingAlign align, GamingAlign hoverAlign, int padding, int hoverPadding, TTF_Font *font, SDL_Renderer *renderer, GamingLauncher *launcher);
     ~LauncherMenuItem();
 
-    virtual void draw(SDL_Renderer *renderer, int y, bool isHovered) override;
+    virtual void draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered) override;
     virtual void onInteract() override;
 };

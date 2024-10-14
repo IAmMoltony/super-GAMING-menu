@@ -8,6 +8,6 @@ public:
     MenuItem();
     ~MenuItem();
 
-    virtual void draw(SDL_Renderer *renderer, int y, bool isHovered);
+    virtual void draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered);
     virtual void onInteract(void);
 };

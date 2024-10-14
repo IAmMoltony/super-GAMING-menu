@@ -12,7 +12,7 @@ Menu::~Menu()
 {
 }
 
-void Menu::draw(SDL_Renderer *renderer)
+void Menu::draw(SDL_Renderer *renderer, int windowWidth, int windowHeight)
 {
     for (size_t i = 0; i < mItems.size(); i++) {
         MenuItem *item = mItems[i];
@@ -24,7 +24,7 @@ void Menu::draw(SDL_Renderer *renderer)
             SDL_RenderFillRect(renderer, &itemRect);
         }
 
-        item->draw(renderer, itemY, isHovered);
+        item->draw(renderer, itemY, windowWidth, windowHeight, isHovered);
     }
 }
 

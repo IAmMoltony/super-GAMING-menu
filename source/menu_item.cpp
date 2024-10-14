@@ -8,7 +8,7 @@ MenuItem::~MenuItem()
 {
 }
 
-void MenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
+void MenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered)
 {
 }
 

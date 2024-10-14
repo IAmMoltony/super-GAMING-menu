@@ -4,6 +4,9 @@
 #include <iostream>
 #include "config_loader.hpp"
 
+#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 460
+
 int main(void)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -11,7 +14,7 @@ int main(void)
 	return 1;
     }
 
-    SDL_Window *window = SDL_CreateWindow("super GAMING menu", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 460, SDL_WINDOW_BORDERLESS);
+    SDL_Window *window = SDL_CreateWindow("super GAMING menu", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_BORDERLESS);
     if (!window) {
         std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
 	return 1;
@@ -81,10 +84,10 @@ int main(void)
         SDL_RenderClear(renderer);
 
         SDL_SetRenderDrawColor(renderer, 12, 12, 34, 255);
-        SDL_Rect clearRect = {0, 0, 500, 460};
+        SDL_Rect clearRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
         SDL_RenderFillRect(renderer, &clearRect);
 
-        menu.draw(renderer);
+        menu.draw(renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         SDL_RenderPresent(renderer);
     }

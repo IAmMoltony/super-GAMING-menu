@@ -15,7 +15,7 @@ public:
     Menu(std::initializer_list<MenuItem *> items);
     ~Menu();
 
-    void draw(SDL_Renderer *renderer);
+    void draw(SDL_Renderer *renderer, int windowWidth, int windowHeight);
     void addItem(MenuItem *item);
     void onMouseMove(int mouseX, int mouseY);
     void onMouseDown(int button);

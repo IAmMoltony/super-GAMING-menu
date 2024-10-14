@@ -19,9 +19,9 @@ LauncherMenuItem::~LauncherMenuItem()
     SDL_DestroyTexture(mIcon);
 }
 
-void LauncherMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
+void LauncherMenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered)
 {
-    TextMenuItem::draw(renderer, y, isHovered);
+    TextMenuItem::draw(renderer, y, windowWidth, windowHeight, isHovered);
 
     if (mIcon) {
         GamingAlign realAlign = isHovered ? mHoverIconAlign : mIconAlign;
@@ -33,10 +33,10 @@ void LauncherMenuItem::draw(SDL_Renderer *renderer, int y, bool isHovered)
             x = realPadding;
             break;
         case GamingAlign::Center:
-            x = 234;
+            x = (windowWidth / 2) - 16;
             break;
         case GamingAlign::Right:
-            x = 468 - realPadding;
+            x = windowWidth - 32 - realPadding;
             break;
         }
 
