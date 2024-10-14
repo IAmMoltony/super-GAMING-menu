@@ -127,13 +127,27 @@ static GamingLauncher *parseLauncher(json launcherJson)
     return nullptr;
 }
 
-Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer)
+Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer, int *windowWidth, int *windowHeight)
 {
     Menu menu;
+
+    *windowWidth = 500;
+    *windowHeight = 460;
 
     std::ifstream configFileStream(configFile);
     json data = json::parse(configFileStream);
     json items = data["items"];
+
+    if (data.contains("window") && data["window"].is_object()) {
+        json window = data["window"];
+
+        if (window.contains("width") && window["width"].is_number()) {
+            *windowWidth = window["width"];
+        }
+        if (window.contains("height") && window["height"].is_number()) {
+            *windowHeight = window["height"];
+        }
+    }
 
     for (json item : items) {
         std::string itemKind;
