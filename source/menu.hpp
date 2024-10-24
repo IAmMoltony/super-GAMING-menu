@@ -3,11 +3,14 @@
 #include "menu_item.hpp"
 #include <initializer_list>
 #include <vector>
+#include <stack>
 
 class Menu
 {
 private:
-    std::vector<MenuItem *> mItems;
+    std::stack<std::vector<MenuItem *> *> mItemLists;
+    std::vector<MenuItem *> *mItems;
+    std::vector<MenuItem *> mBaseItems;
     int mHoveredItem;
 
 public:
