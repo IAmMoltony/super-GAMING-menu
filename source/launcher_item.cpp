@@ -45,8 +45,13 @@ void LauncherMenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int 
     }
 }
 
-void LauncherMenuItem::onInteract(void)
+MenuItemAction LauncherMenuItem::onInteract(void)
 {
     if (mLauncher)
+    {
         mLauncher->launch();
+        return MenuItemAction::Exit;
+    }
+
+    return MenuItemAction::None;
 }

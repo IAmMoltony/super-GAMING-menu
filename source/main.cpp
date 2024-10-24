@@ -72,16 +72,17 @@ int main(void)
             }
 
             if (event.type == SDL_KEYDOWN) {
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    running = false;
-                } else {
-                    menu.onKeyDown(event.key.keysym.sym);
-                }
+                menu.onKeyDown(event.key.keysym.sym);
             } else if (event.type == SDL_MOUSEMOTION) {
                 menu.onMouseMove(event.motion.x, event.motion.y);
             } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 menu.onMouseDown(event.button.button);
             }
+        }
+
+        if (menu.shouldQuit()) {
+            running = false;
+            break;
         }
 
         SDL_RenderClear(renderer);

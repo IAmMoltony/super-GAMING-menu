@@ -12,6 +12,7 @@ private:
     std::vector<MenuItem *> *mItems;
     std::vector<MenuItem *> mBaseItems;
     int mHoveredItem;
+    bool mShouldQuit;
 
 public:
     Menu();
@@ -23,4 +24,6 @@ public:
     void onMouseMove(int mouseX, int mouseY);
     void onMouseDown(int button);
     void onKeyDown(SDL_Keycode key);
+
+    bool shouldQuit();
 };

@@ -1,12 +1,12 @@
 #include "menu.hpp"
 
-Menu::Menu() : mItemLists(), mBaseItems(), mHoveredItem(-1)
+Menu::Menu() : mItemLists(), mBaseItems(), mHoveredItem(-1), mShouldQuit(false)
 {
     mItemLists.push(&mBaseItems);
     mItems = mItemLists.top();
 }
 
-Menu::Menu(std::initializer_list<MenuItem *> items) : mItemLists(), mBaseItems(items), mHoveredItem(-1)
+Menu::Menu(std::initializer_list<MenuItem *> items) : mItemLists(), mBaseItems(items), mHoveredItem(-1), mShouldQuit(false)
 {
     mItemLists.push(&mBaseItems);
     mItems = mItemLists.top();
@@ -52,7 +52,15 @@ void Menu::onMouseMove(int mouseX, int mouseY)
 void Menu::onMouseDown(int button)
 {
     if (button == 1 && mHoveredItem >= 0) {
-        mItems->at(mHoveredItem)->onInteract();
+        MenuItemAction action = mItems->at(mHoveredItem)->onInteract();
+
+        switch (action) {
+        default:
+            break;
+        case MenuItemAction::Exit:
+            mShouldQuit = true;
+            break;
+        }
     }
 }
 
@@ -70,5 +78,12 @@ void Menu::onKeyDown(SDL_Keycode key)
         }
     } else if (key == SDLK_RETURN && mHoveredItem >= 0) {
         mItems->at(mHoveredItem)->onInteract();
+    } else if (key == SDLK_ESCAPE) {
+        mShouldQuit = true;
     }
+}
+
+bool Menu::shouldQuit(void)
+{
+    return mShouldQuit;
 }

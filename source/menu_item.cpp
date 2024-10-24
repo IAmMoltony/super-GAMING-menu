@@ -12,6 +12,7 @@ void MenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHe
 {
 }
 
-void MenuItem::onInteract(void)
+MenuItemAction MenuItem::onInteract(void)
 {
+    return MenuItemAction::None;
 }

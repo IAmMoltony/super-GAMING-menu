@@ -2,6 +2,12 @@
 
 #include <SDL2/SDL.h>
 
+enum class MenuItemAction
+{
+    Exit,
+    None
+};
+
 class MenuItem
 {
 public:
@@ -9,5 +15,5 @@ public:
     ~MenuItem();
 
     virtual void draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered);
-    virtual void onInteract(void);
+    virtual MenuItemAction onInteract(void);
 };
