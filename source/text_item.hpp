@@ -25,4 +25,5 @@ public:
     ~TextMenuItem();
 
     virtual void draw(SDL_Renderer *renderer, int y, int windowWidth, int windowHeight, bool isHovered) override;
+    virtual MenuItemAction onInteract(void) override;
 };

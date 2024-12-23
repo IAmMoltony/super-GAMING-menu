@@ -6,6 +6,7 @@
 #include "separator_item.hpp"
 #include "text_item.hpp"
 #include "launcher_item.hpp"
+#include <cerrno>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -135,6 +136,12 @@ Menu loadConfig(std::string configFile, TTF_Font *font, SDL_Renderer *renderer, 
     *windowHeight = 460;
 
     std::ifstream configFileStream(configFile);
+
+    if (configFileStream.bad()) {
+        std::cerr << "Error opening config file: '" << configFile << "': " << strerror(errno) << std::endl;
+        return menu;
+    }
+
     json data = json::parse(configFileStream);
     json items = data["items"];
 

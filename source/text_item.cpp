@@ -1,4 +1,5 @@
 #include "text_item.hpp"
+#include "menu_item.hpp"
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 
@@ -63,4 +64,9 @@ void TextMenuItem::draw(SDL_Renderer *renderer, int y, int windowWidth, int wind
     SDL_Rect destRect = {x, y, textureWidth, textureHeight};
 
     SDL_RenderCopy(renderer, texture, nullptr, &destRect);
+}
+
+MenuItemAction TextMenuItem::onInteract(void)
+{
+    return MenuItemAction::None;
 }
